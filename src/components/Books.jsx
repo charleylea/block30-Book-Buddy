@@ -37,13 +37,6 @@ const Books = () => {
     setSearchQuery(e.target.value);
   };
 
-  // const filteredBooks = useMemo(() => {
-  //   return books.filter((book) =>
-  //     book.title.toLowerCase().includes(searchQuery.toLowerCase())
-  //   );
-  // }, [books, searchQuery]);
-
-  // Show loading or error states
   if (loading) return <div>Loading books...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
 

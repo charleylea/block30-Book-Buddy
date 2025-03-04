@@ -9,21 +9,25 @@ const Account = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const getUserInfo = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/account", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setUserInfo(data.user);
-        setCheckedOutBooks(data.checkedOutBooks);
-      })
-      .catch((err) => console.error("Error fetching account info:", err));
+    const respone = await fetch(
+      "https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/me",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const result = await respone.json();
+    console.log(result);
+    setUserInfo(result);
+  };
+  useEffect(() => {
+    getUserInfo();
   }, []);
 
   return (
