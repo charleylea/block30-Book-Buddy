@@ -1,6 +1,5 @@
 /* TODO - add your code to create a functional React component that displays all of the available books in the library's catalog. Fetch the book data from the provided API. Users should be able to click on an individual book to navigate to the SingleBook component and view its details. */
 
-import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -14,7 +13,7 @@ const Books = () => {
   useEffect(() => {
     // Fetch all books from the API
     setLoading(true);
-    fetch(`https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/books`);
+    fetch(`https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/books`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch books.");
@@ -22,7 +21,8 @@ const Books = () => {
         return response.json();
       })
       .then((data) => {
-        setBooks(data);
+        console.log(data.books);
+        setBooks(data.books);
         setLoading(false);
       })
       .catch((err) => {
@@ -37,12 +37,11 @@ const Books = () => {
     setSearchQuery(e.target.value);
   };
 
-  // Memoize filtered books for better performance
-  const filteredBooks = useMemo(() => {
-    return books.filter((book) =>
-      book.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [books, searchQuery]);
+  // const filteredBooks = useMemo(() => {
+  //   return books.filter((book) =>
+  //     book.title.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  // }, [books, searchQuery]);
 
   // Show loading or error states
   if (loading) return <div>Loading books...</div>;
@@ -62,10 +61,13 @@ const Books = () => {
       />
 
       <ul>
-        {filteredBooks.length > 0 ? (
-          filteredBooks.map((book) => (
+        {books && books.length > 0 ? (
+          books.map((book) => (
             <li key={book.id}>
-              <Link to={`/books/${book.id}`}>{book.title}</Link>
+              <Link to={`/books/${book.id}`}>
+                {book.title} by {book.author}
+              </Link>
+              <img src={book.coverimage} alt={book.title} />
             </li>
           ))
         ) : (
